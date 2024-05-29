@@ -136,7 +136,7 @@ class CarController extends Controller
         }
         return redirect(route("auth.login"));
     }
-    public function delete(Car $car){
+    public function destroy(Car $car){
         if(auth()->user()){
             if(auth()->user()->isAdmin){
                 Storage::disk("public")->delete($car->image ?? "");

@@ -22,20 +22,11 @@ Route::get('/', [HomeController::class, "index"])->name("home");
 
 Route::get("/register", [AuthController::class, "register"])->name("auth.register");
 Route::post("/register", [AuthController::class, "store"])->name("auth.store");
-
 Route::get("/login", [AuthController::class, "login"])->name("auth.login");
 Route::post("/login", [AuthController::class, "authenticate"])->name("auth.authenticate");
-
 Route::post("/logout", [AuthController::class, "logout"])->name("auth.logout");
 
-Route::get("/cars", [CarController::class, "index"])->name("cars.index");
-Route::get("/cars/create", [CarController::class, "create"])->name("cars.create");
-Route::post("/cars/create", [CarController::class, "store"])->name("cars.store");
-
-Route::get("/cars/edit/{car}", [CarController::class, "edit"])->name("cars.edit");
-Route::post("/cars/edit/{car}", [CarController::class, "update"])->name("cars.update");
-
-Route::post("/cars/delete/{car}", [CarController::class, "delete"])->name("cars.delete");
+Route::resource('cars', CarController::class);
 
 
 

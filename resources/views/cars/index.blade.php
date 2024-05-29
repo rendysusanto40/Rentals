@@ -10,7 +10,7 @@
                 Lorem akmlasmas;dmaksdjkas
             </p>
         </div>
-        <div class="grid grid-cols-2 gap-x-12 gap-y-8 pb-24">
+        <div class="grid grid-cols-2 gap-x-12 gap-y-8">
             <div class="flex flex-col items-end justify-center col-span-2 mr-10 gap-y-0">
                 <form action="{{route("cars.index")}}" method="get" class="flex items-center">
                     @csrf
@@ -99,7 +99,7 @@
                         <option value="ASC" {{ request('sort') == 'ASC' ? 'selected' : '' }}>Price, Low to High</option>
                         <option value="DESC" {{ request('sort') == 'DESC' ? 'selected' : '' }}>Price, High to Low</option>
                     </select>
-                    <input type="submit" value="Apply Filter" class="bg-green-500 h-9 px-2 rounded-lg">
+                    <input type="submit" value="Apply Filter" class="bg-green-500 h-9 px-2 rounded-lg cursor-pointer">
             </form>
             @forelse ( $carList as $car)
                 <div class="text-white w-[650px] h-[250px] border flex rounded-md p-4">
@@ -113,8 +113,9 @@
                                 @if (auth()->user()->isAdmin)
                                 <div class="flex">
                                     <a href="{{route("cars.edit", $car->id)}}" class="bg-yellow-500 px-2 rounded-sm cursor-pointer mr-2">Edit</a>
-                                    <form action="{{route("cars.delete", $car->id)}}" method="POST">
+                                    <form action="{{route("cars.destroy", $car->id)}}" method="POST">
                                         @csrf
+                                        @method("DELETE")
                                         <input type="submit" value="X" class="bg-red-500 px-2 rounded-sm cursor-pointer">
                                     </form>
                                 </div>
@@ -149,6 +150,9 @@
                     No Result Found.
                 </div>
             @endforelse
+        </div>
+        <div class="py-16">
+            {{$carList->withQueryString()->links()}}
         </div>
     </div>
     <script type="text/javascript">

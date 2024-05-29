@@ -10,6 +10,7 @@
             </div>
             <form enctype="multipart/form-data" action={{route("cars.update", $car->id)}} method="POST" class="flex flex-col mx-5">
                 @csrf
+                @method("PUT")
                 <div class="flex flex-row items-start">
                     <div class="w-1/2 flex flex-col mr-2">
                         <label for="model" class="text-white my-2">Model</label>
