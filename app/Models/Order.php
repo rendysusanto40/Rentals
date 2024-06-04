@@ -5,18 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Motorcycle extends Model
+class Order extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "model",
-        'brand',
-        'type',
-        'production_year',
-        'transmission',
+        "user_id",
+        "start_date",
+        "end_date",
         "price",
-        'engine_capacity',
-        'image',
-        'color'
+        "car_id",
+        "motorcycle_id"
     ];
 }

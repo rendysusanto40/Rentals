@@ -17,6 +17,12 @@ return [
 
     'default' => env('DB_CONNECTION', 'mysql'),
 
+    'mysql' => [
+        // Other configurations...
+        'timezone' => '+07:00', // Or your desired timezone offset
+    ],
+
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections

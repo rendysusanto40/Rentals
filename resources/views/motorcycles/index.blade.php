@@ -1,22 +1,21 @@
 @extends("layoutWithFooter")
 
-@section("title", "Cars")
+@section("title", "Motorcycle")
 
 @section("content")
     <div class="pt-20 min-h-screen max-w-screen flex  flex-col items-center">
         <div class="text-white text-3xl font-bold pt-10 pb-5 flex flex-col items-center justify-center">
-            List of Cars
+            List of Motorcycles
             <p class="text-xl pt-1 mt-1 border-t border-w-500">
                 Lorem akmlasmas;dmaksdjkas
             </p>
         </div>
-        <form action="{{route("cars.index")}}" method="GET">
+        <form action="{{route("motorcycles.index")}}" method="GET" >
             <div class="w-full flex justify-center">
                 <div class="flex items-center justify-around w-[800px] h-12 mt-5 mb-10 bg-zinc-700 rounded-lg">
-                    @csrf
                     <div>
                         <label for="startDate" class="text-white font-bold text-lg">Date Start Renting</label>
-                        <input type="date" name="startDate" id="startDate" class="pl-2" value="{{request("startDate") ?? now()->toDateString("Y-m-d")}}">
+                        <input type="date" name="startDate" id="startDate" class="pl-2" value="{{request("startDate") ?? date("Y-m-d")}}">
                     </div>
                     <div>
                         <label for="endDate" class="text-white font-bold text-lg">Date End Renting</label>
@@ -28,6 +27,7 @@
             <div class="grid grid-cols-2 gap-x-12 gap-y-8">
                 <div class="flex flex-col items-end justify-center col-span-2 mr-10 gap-y-0">
                     <div class="flex items-center">
+                        @csrf
                         <svg class="dark:fill-white dark:stroke-white mr-2" fill="#000000" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.4 490.4" xml:space="preserve" stroke="#00000">
                             <g id="SVGRepo_bgCarrier" stroke-width="0"/>
                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
@@ -39,8 +39,8 @@
                     <div class="flex items-center mt-5">
                         @auth
                             @if (auth()->user()->isAdmin)
-                            <a class="bg-green-500 py-1 px-2 mr-2 rounded-md" href="{{route("cars.create")}}">
-                                Add New Car
+                            <a class="bg-green-500 py-1 px-2 mr-2 rounded-md" href="{{route("motorcycles.create")}}">
+                                Add New Motorcycle
                             </a>
                             @endif
                         @endauth
@@ -54,58 +54,37 @@
                     @csrf
                         <select name="type" id="type" class="rounded-md px-2 h-9">
                             <option value="" selected>All Type</option>
-                            <option value="LCGC" {{ request('type')  == 'LCGC' ? 'selected' : '' }}>LCGC</option>
-                            <option value="Compact" {{ request('type')  == 'Compact' ? 'selected' : '' }}>Compact</option>
-                            <option value="Sedan" {{ request('type')  == 'Sedan' ? 'selected' : '' }}>Sedan</option>
-                            <option value="SUV" {{ request('type')  == 'SUV' ? 'selected' : '' }}>SUV</option>
-                            <option value="MPV" {{ request('type')  == 'MPV' ? 'selected' : '' }}>MPV</option>
-                            <option value="Minivan" {{ request('type')  == 'Minivan' ? 'selected' : '' }}>Minivan</option>
-                            <option value="Pickup Truck" {{ request('type')  == 'Pickup Truck' ? 'selected' : '' }}>Pickup Truck</option>
-                            <option value="Luxury" {{ request('type') == 'Luxury' ? 'selected' : '' }}>Luxury</option>
-                            <option value="Sports Car" {{ request('type') == 'Sports Car' ? 'selected' : '' }}>Sports Car</option>
+                            <option value="Cruiser" {{ request('type') == 'Cruiser' ? 'selected' : '' }}>Cruiser</option>
+                            <option value="Sport" {{ request('type') == 'Sport' ? 'selected' : '' }}>Sport</option>
+                            <option value="Touring" {{ request('type') == 'Touring' ? 'selected' : '' }}>Touring</option>
+                            <option value="Standard" {{ request('type') == 'Standard' ? 'selected' : '' }}>Standard</option>
+                            <option value="Dual-Sport" {{ request('type') == 'Dual-Sport' ? 'selected' : '' }}>Dual-Sport</option>
+                            <option value="Dirt Bike" {{ request('type') == 'Dirt Bike' ? 'selected' : '' }}>Dirt Bike</option>
                         </select>
                         <select name="brand" id="brand" class="rounded-md pl-2 h-9 pr-2">
                             <option value="" selected>All Brand</option>
-                            <option value="Toyota" {{ request('brand') == 'Toyota' ? 'selected' : '' }}>Toyota</option>
                             <option value="Honda" {{ request('brand') == 'Honda' ? 'selected' : '' }}>Honda</option>
-                            <option value="Ford" {{ request('brand') == 'Ford' ? 'selected' : '' }}>Ford</option>
-                            <option value="Chevrolet" {{ request('brand') == 'Chevrolet' ? 'selected' : '' }}>Chevrolet</option>
-                            <option value="BMW" {{ request('brand') == 'BMW' ? 'selected' : '' }}>BMW</option>
-                            <option value="Mercedes-Benz" {{ request('brand') == 'Mercedes-Benz' ? 'selected' : '' }}>Mercedes-Benz</option>
-                            <option value="Audi" {{ request('brand') == 'Audi' ? 'selected' : '' }}>Audi</option>
-                            <option value="Volkswagen" {{ request('brand') == 'Volkswagen' ? 'selected' : '' }}>Volkswagen</option>
-                            <option value="Subaru" {{ request('brand') == 'Subaru' ? 'selected' : '' }}>Subaru</option>
-                            <option value="Nissan" {{ request('brand') == 'Nissan' ? 'selected' : '' }}>Nissan</option>
-                            <option value="Tesla" {{ request('brand') == 'Tesla' ? 'selected' : '' }}>Tesla</option>
-                            <option value="Hyundai" {{ request('brand') == 'Hyundai' ? 'selected' : '' }}>Hyundai</option>
-                            <option value="Kia" {{ request('brand') == 'Kia' ? 'selected' : '' }}>Kia</option>
-                            <option value="Mazda" {{ request('brand') == 'Mazda' ? 'selected' : '' }}>Mazda</option>
-                            <option value="Volvo" {{ request('brand') == 'Volvo' ? 'selected' : '' }}>Volvo</option>
-                            <option value="Jeep" {{ request('brand') == 'Jeep' ? 'selected' : '' }}>Jeep</option>
+                            <option value="Yamaha" {{ request('brand') == 'Yamaha' ? 'selected' : '' }}>Yamaha</option>
+                            <option value="Kawasaki" {{ request('brand') == 'Kawasaki' ? 'selected' : '' }}>Kawasaki</option>
                             <option value="Suzuki" {{ request('brand') == 'Suzuki' ? 'selected' : '' }}>Suzuki</option>
-                                <option value="Mitsubishi" {{ request('brand') == 'Mitsubishi' ? 'selected' : '' }}>Mitsubishi</option>
+                            <option value="Ducati" {{ request('brand') == 'Ducati' ? 'selected' : '' }}>Ducati</option>
+                            <option value="Ha   rley-Davidson" {{ request('brand') == 'Harley-Davidson' ? 'selected' : '' }}>Harley-Davidson</option>
+                            <option value="BMW" {{ request('brand') == 'BMW' ? 'selected' : '' }}>BMW</option>
                         </select>
                         <input type="number" min="1900" placeholder="Production Year" name="production_year" id="production_year" value="{{request('production_year') ?? ""}}" class="rounded-md px-2 h-9 w-40"/>
-                        <select name="people_capacity" id="people_capacity" class="rounded-md px-2 h-9">
-                                <option value="" selected>All Seat</option>
-                                <option value="2"{{ request('people_capacity') == '2' ? 'selected' : '' }}>2</option>
-                                <option value="4-5" {{ request('people_capacity') == '4-5' ? 'selected' : '' }}>4-5</option>
-                                <option value="6-7" {{ request('people_capacity') == '6-7' ? 'selected' : '' }}>6-7</option>
-                                <option value="8+" {{ request('people_capacity') == '8+' ? 'selected' : '' }}>8+</option>
-                        </select>
-                        <select name="engine_type" id="engine_type" class="rounded-md px-2 h-9">
-                                <option value="" selected>All Engine</option>
-                                <option value="Petrol" {{ request('engine_type') == 'Petrol' ? 'selected' : '' }}>Petrol</option>
-                                <option value="Diesel" {{ request('engine_type') == 'Diesel' ? 'selected' : '' }}>Diesel</option>
-                                <option value="HEV" {{ request('engine_type') == 'HEV' ? 'selected' : '' }}>Hybrid</option>
-                                <option value="PHEV" {{ request('engine_type') == 'PHEV' ? 'selected' : '' }}>Plug-In Hybrid</option>
-                                <option value="BEV" {{ request('engine_type') == 'BEV' ? 'selected' : '' }}>Electric</option>
+                        <select name="engine_capacity" id="engine_capacity" class="rounded-md px-2 h-9">
+                                <option value="" selected>All Engine Capacity</option>
+                                <option value="0-250" {{ request('engine_capacity') == '0-250' ? 'selected' : '' }}>Below 250cc</option>
+                                <option value="250-500" {{ request('engine_capacity') == '250-500' ? 'selected' : '' }}>250cc - 500cc</option>
+                                <option value="500-700" {{ request('engine_capacity') == '500-700' ? 'selected' : '' }}>500cc - 750cc</option>
+                                <option value="750-1000" {{ request('engine_capacity') == '750-1000' ? 'selected' : '' }}>750cc - 1000cc</option>
                         </select>
                         <select name="transmission" id="transmission" class="rounded-md px-2 h-9">
                                 <option value="" selected>All Transmission</option>
                                 <option value="Manual" {{ request('transmission') == 'Manual' ? 'selected' : '' }}>Manual</option>
                                 <option value="Automatic" {{ request('transmission') == 'Automatic' ? 'selected' : '' }}>Automatic</option>
-                            </select>
+                                <option value="Semi-Automatic" {{ request('transmission') == 'Semi-Automatic' ? 'selected' : '' }}>Semi-Automatic</option>
+                        </select>
                         <select name="sort" id="sort" class="rounded-md px-2 h-9">
                             <option value="" disabled selected>Sort</option>
                             <option value="Lat" {{ request('sort') == 'Lat' ? 'selected' : '' }}>Latest</option>
@@ -115,20 +94,20 @@
                         </select>
                         <input type="submit" value="Apply Filter" class="bg-green-500 h-9 px-2 rounded-lg cursor-pointer">
                 </div>
-        </form>
-            @forelse ( $carList as $car)
+            </form>
+            @forelse ( $motorcycleList as $motorcycle)
                 <div class="text-white w-[650px] h-[250px] border flex rounded-md p-4">
-                    <img src="{{$car->image}}" class="w-1/2 h-full object-cover object-center"  style="filter: blur(0.7px);"/>
+                    <img src="{{$motorcycle->image}}" class="w-1/2 h-full object-cover object-center" style="filter: blur(0.4px);"/>
                     <div class="w-1/2 ml-4 flex flex-col justify-between">
                         <div class="flex justify-between items-center">
                             <p class="text-2xl">
-                                {{$car->model}}
+                                {{$motorcycle->model}}
                             </p>
                             @auth
                                 @if (auth()->user()->isAdmin)
                                 <div class="flex">
-                                    <a href="{{route("cars.edit", $car->id)}}" class="bg-yellow-500 px-2 rounded-sm cursor-pointer mr-2">Edit</a>
-                                    <form action="{{route("cars.destroy", $car->id)}}" method="POST">
+                                    <a href="{{route("motorcycles.edit", $motorcycle->id)}}" class="bg-yellow-500 px-2 rounded-sm cursor-pointer mr-2">Edit</a>
+                                    <form action="{{route("motorcycles.destroy", $motorcycle->id)}}" method="POST">
                                         @csrf
                                         @method("DELETE")
                                         <input type="submit" value="X" class="bg-red-500 px-2 rounded-sm cursor-pointer">
@@ -138,28 +117,24 @@
                             @endauth
                         </div>
                         <p class="text-zinc-300">
-                            {{$car->brand ?? ""}}
+                            {{$motorcycle->brand ?? ""}}
                         </p>
                         <div class="flex mt-2">
                             <p class="flex items-center mr-5">
                                 <img src="img\steering-wheel-svgrepo-com.svg" alt="" class="mr-1 h-6"/>
-                                {{$car->transmission}}
+                                {{$motorcycle->transmission}}
                             </p>
                             <p class="flex items-center">
-                                <img src="img\people-svgrepo-com.svg" alt="" class="mr-1 h-6"/>
-                                {{$car->people_capacity}}
+                                <img src="img/172463_engine_icon.svg" alt="" class="mr-2 h-6"/>
+                                {{$motorcycle->engine_capacity}} CC
                             </p>
                         </div>
-                        <p class="flex items-center mt-2">
-                            <img src="img\luggage-svgrepo-com.svg" alt="" class="mr-1 h-6"/>
-                            {{$car->trunk_capacity}} L
-                        </p>
                         <div class="flex h-full items-end justify-end mt-3">
                             @auth
                                 <a href="" class="bg-blue-700 px-2.5 py-1 rounded-lg mr-2 text-center">Book</a>
                             @endauth
                             <div class="flex flex-col items-end justify-end font-bold">
-                                <p class="text-xl text-green-500 mr-7">{{ 'Rp ' . number_format($car->price, 0, ',', '.') }}</p>
+                                <p class="text-xl text-green-500 mr-7">{{ 'Rp ' . number_format($motorcycle->price, 0, ',', '.') }}</p>
                                 <p class="text-zinc-500 -mt-5 -mr-2">/day</p>
                             </div>
                         </div>
@@ -172,7 +147,7 @@
             @endforelse
         </div>
         <div class="py-16">
-            {{$carList->withQueryString()->links()}}
+            {{$motorcycleList->withQueryString()->links()}}
         </div>
     </div>
     <script type="text/javascript">

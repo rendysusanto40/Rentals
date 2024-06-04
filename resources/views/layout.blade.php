@@ -16,7 +16,7 @@
             <a href="{{route("cars.index")}}" class="text-white hover:text-neutral-300 ease-in duration-100 delay-100 text-xl">Cars</a>
         </li>
         <li class="px-7">
-            <a href="" class="text-white hover:text-neutral-300 ease-in duration-100 delay-100 text-xl ">Motorcycles</a>
+            <a href="{{route("motorcycles.index")}}" class="text-white hover:text-neutral-300 ease-in duration-100 delay-100 text-xl ">Motorcycles</a>
         </li>
         <li class="px-7">
             <a href="" class="text-white hover:text-neutral-300  ease-in duration-100 delay-100 text-xl ">About Us</a>
