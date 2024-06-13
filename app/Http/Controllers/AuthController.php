@@ -42,11 +42,15 @@ class AuthController extends Controller
     public function authenticate(Request $request){
         $validateField = $request->validate([
             'email' => "required|email",
-            'password' => "required|min:8",
+            'password' => "required",
         ]);
 
         if(auth()->attempt($validateField)){
             $request->session()->regenerate();
+        }else{
+            return back()->withErrors([
+                'password' => 'Invalid email or password', // Set a generic error message
+            ]);;
         }
 
         return redirect(route("home"));

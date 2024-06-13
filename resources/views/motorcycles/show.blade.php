@@ -4,22 +4,20 @@
 
 @section("content")
 
-<form action="{{route("order.car.create", $car)}}" method="post">
+<form action="{{route("order.motorcycle.create", $motorcycle)}}" method="post">
     @csrf
     <div class="py-20 min-h-screen max-w-screen flex flex-col items-center text-white">
-        <h1 class="py-12 text-4xl font-bold">Rent Car Details</h1>
+        <h1 class="py-12 text-4xl font-bold">Rent Motorcycle Details</h1>
         <div class="w-[830px] h-[400px] flex justify-center items-center border border-b-0 border-white rounded-md rounded-b-none bg-zinc-800 py-12 ">
-            <img src="{{ asset($car->image) }}" alt="{{ $car->model }}" class="w-5/12 h-full object-cover object-center mr-14 rounded-xl"/>
+            <img src="{{ asset($motorcycle->image) }}" alt="{{ $motorcycle->model }}" class="w-5/12 h-full object-contain object-center mr-14 rounded-xl"/>
             <div class="text-xl">
-                <h2 class="text-3xl font-bold mb-2">Car Details</h2>
-                <div>Model: {{$car->model}}</div>
-                <div>Brand: {{$car->brand}}</div>
-                <div>Type: {{$car->type}}</div>
-                <div>Engine: {{$car->engine_type}}</div>
-                <div>Transmission: {{$car->transmission}}</div>
-                <div>Passenger Seat: {{$car->people_capacity}}</div>
-                <div>Trunk Capacity: {{$car->trunk_capacity}} L</div>
-                <div>Production Year: {{$car->production_year}}</div>
+                <h2 class="text-3xl font-bold mb-2">Motorcycle Details</h2>
+                <div>Model: {{$motorcycle->model}}</div>
+                <div>Brand: {{$motorcycle->brand}}</div>
+                <div>Type: {{$motorcycle->type}}</div>
+                <div>Engine: {{$motorcycle->engine_capacity}} CC</div>
+                <div>Transmission: {{$motorcycle->transmission}}</div>
+                <div>Production Year: {{$motorcycle->production_year}}</div>
             </div>
         </div>
         <div class="w-[830px] h-[150px] flex flex-col items-center justify-center border border-y-0 border-white  bg-zinc-800">
@@ -73,8 +71,8 @@
                 $endDate = Carbon::parse(session('endDate'));
                 $diffInDays = $startDate->diffInDays($endDate);
             @endphp
-            <input type="number" name="price" id="price" value="{{$car->price * $diffInDays}}" hidden>
-            <p class="text-xl text-green-500 mr-7">{{ 'Rp ' . number_format($car->price * $diffInDays, 0, ',', '.') }}</p>
+            <input type="number" name="price" id="price" value="{{$motorcycle->price * $diffInDays}}" hidden>
+            <p class="text-xl text-green-500 mr-7">{{ 'Rp ' . number_format($motorcycle->price * $diffInDays, 0, ',', '.') }}</p>
             <button type="submit" class="px-3 py-2 text-white bg-green-500 my-12 text-xl rounded-xl">Rent Now</button>
         </div>
     </div>

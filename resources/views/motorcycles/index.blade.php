@@ -12,14 +12,20 @@
         </div>
         <form action="{{route("motorcycles.index")}}" method="GET" >
             <div class="w-full flex justify-center">
-                <div class="flex items-center justify-around w-[800px] h-12 mt-5 mb-10 bg-zinc-700 rounded-lg">
+                <div class="flex items-center justify-around w-[700px] h-12 mt-5 mb-10 bg-zinc-700 rounded-lg">
+                    @php
+                        use Carbon\Carbon;
+
+                        $today = Carbon::today()->format('Y-m-d');
+                        $tomorrow = Carbon::tomorrow()->format('Y-m-d');
+                    @endphp
                     <div>
-                        <label for="startDate" class="text-white font-bold text-lg">Date Start Renting</label>
-                        <input type="date" name="startDate" id="startDate" class="pl-2" value="{{request("startDate") ?? date("Y-m-d")}}">
+                        <label for="startDate" class="text-white font-bold text-lg">Date Start</label>
+                        <input type="date" name="startDate" id="startDate" class="pl-2" value="{{session("startDate") ?? $today}}">
                     </div>
                     <div>
-                        <label for="endDate" class="text-white font-bold text-lg">Date End Renting</label>
-                        <input type="date" name="endDate" id="endDate" class="pl-2" value="{{request("endDate") ?? ""}}">
+                        <label for="endDate" class="text-white font-bold text-lg">Date End</label>
+                        <input type="date" name="endDate" id="endDate" class="pl-2" value="{{session("endDate") ?? $tomorrow}}">
                     </div>
                     <button type="submit" class="bg-green-500 rounded-lg px-2 py-1">Submit</button>
                 </div>
@@ -97,7 +103,7 @@
             </form>
             @forelse ( $motorcycleList as $motorcycle)
                 <div class="text-white w-[650px] h-[250px] border flex rounded-md p-4">
-                    <img src="{{$motorcycle->image}}" class="w-1/2 h-full object-cover object-center" style="filter: blur(0.4px);"/>
+                    <img src="{{$motorcycle->image}}" class="w-1/2 h-full object-cover object-center"/>
                     <div class="w-1/2 ml-4 flex flex-col justify-between">
                         <div class="flex justify-between items-center">
                             <p class="text-2xl">
@@ -131,7 +137,7 @@
                         </div>
                         <div class="flex h-full items-end justify-end mt-3">
                             @auth
-                                <a href="" class="bg-blue-700 px-2.5 py-1 rounded-lg mr-2 text-center">Book</a>
+                                <a href="{{route("motorcycles.show", $motorcycle)}}" class="bg-blue-700 px-2.5 py-1 rounded-lg mr-2 text-center">Rent Now</a>
                             @endauth
                             <div class="flex flex-col items-end justify-end font-bold">
                                 <p class="text-xl text-green-500 mr-7">{{ 'Rp ' . number_format($motorcycle->price, 0, ',', '.') }}</p>

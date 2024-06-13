@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Models\Order;
+use App\Models\OrderCar;
 use App\Models\Transaction;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\ImageManager as Image;
 use Illuminate\Support\Facades\Storage;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
@@ -48,14 +50,17 @@ class CarController extends Controller
         $startDate = request("startDate");
         $endDate = request("endDate");
         if($startDate && $endDate){
-            $orders = Order::where('start_date', '>=', request("startDate"))
-                    ->where('end_date', '<=', request("endDate"))
-                    ->pluck('car_id');
-            $carList->whereNotIn('id', $orders)->get();
+            if ($startDate < $endDate) {
+                session()->put("startDate", $startDate);
+                session()->put("endDate", $endDate);
+                $orders = OrderCar::where('start_date', '>=', $startDate)
+                        ->where('end_date', '<=', $endDate)
+                        ->distinct()->pluck('car_id');
+                $carList->whereNotIn('id', $orders)->get();
+            }
         }
         $carList = $carList->paginate(10);
         return view("cars.index", compact("carList"));
-
     }
 
 
@@ -79,9 +84,9 @@ class CarController extends Controller
                     'type' => "required| min:2 | max:15",
                     'production_year' => "required | integer | digits:4 | before_or_equal:$currentYear",
                     'transmission' => "required",
-                    "price" => "required",
+                    "price" => "required|integer",
                     'people_capacity' => 'required',
-                    'trunk_capacity' => 'required',
+                    'trunk_capacity' => 'required|integer',
                     "engine_type" => 'required',
                     "image" => "required|image|mimes:jpeg,png,jpg,gif,svg:max:2048",
                     "color" => 'required'
@@ -100,6 +105,9 @@ class CarController extends Controller
     }
 
     public function edit(Car $car){
+        if (!Car::where("id", $car->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin){
                 return view("cars.edit", compact("car"));
@@ -110,6 +118,9 @@ class CarController extends Controller
     }
 
     public function update(Car $car){
+        if (!Car::where("id", $car->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin){
                 $currentYear = date('Y');
@@ -119,9 +130,9 @@ class CarController extends Controller
                     'type' => "required| min:2 | max:15",
                     'production_year' => "required | integer | digits:4 | before_or_equal:$currentYear",
                     'transmission' => "required",
-                    "price" => "required",
+                    "price" => "required|integer",
                     'people_capacity' => 'required',
-                    'trunk_capacity' => 'required',
+                    'trunk_capacity' => 'required|integer',
                     "engine_type" => 'required',
                     "image" => "image|mimes:jpeg,png,jpg,gif,svg|max:5120 ",
                     "color" => 'required'
@@ -140,6 +151,9 @@ class CarController extends Controller
         return redirect(route("auth.login"));
     }
     public function destroy(Car $car){
+        if (!Car::where("id", $car->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin && Car::where("id", $car->id)){
                 Storage::disk("public")->delete($car->image ?? "");
@@ -150,10 +164,23 @@ class CarController extends Controller
         }
         return redirect(route("auth.login"));
     }
-    public function show(Car $car, Date $startDate, Date $endDate){
-        if(auth()->user() && Car::where("id", $car->id)){
-            return view("cars.show", compact("car", "startDate", "endDate"));
+    public function show(Car $car){
+        if (session("startDate") === null || session("endDate") === null) {
+            return back();
         }
-        return redirect(route("auth.login"));
+        if (session("startDate") >= session("endDate")) {
+            return back();
+        }
+
+        if (!auth()->check()) {
+            return redirect(route("auth.login"));
+        }
+        if (!Car::where("id", $car->id)->exists()) {
+            return back();
+        }
+
+        // Display the car's details
+        return view("cars.show", ["car" => $car]);
     }
+
 }

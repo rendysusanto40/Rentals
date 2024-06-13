@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Motorcycle;
 use App\Models\Order;
+use App\Models\OrderMotorcycles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class MotorcycleController extends Controller
@@ -50,11 +52,15 @@ class MotorcycleController extends Controller
 
         $startDate = request("startDate");
         $endDate = request("endDate");
-        if($startDate != NULL && $endDate != NULL){
-            $orders = Order::where("start_date", ">=", $startDate)
-                    ->where("end_date", "<=", $endDate)
-                    ->pluck("motorcycle_id");
-            $motorcycleList->whereNotIn("id", $orders)->get();
+        if($startDate && $endDate){
+            if ($startDate < $endDate) {
+                session()->put("startDate", $startDate);
+                session()->put("endDate", $endDate);
+                $orders = OrderMotorcycles::where('start_date', '>=', $startDate)
+                        ->where('end_date', '<=', $endDate)
+                        ->distinct()->pluck('motorcycle_id');
+                $motorcycleList->whereNotIn('id', $orders)->get();
+            }
         }
 
         $motorcycleList = $motorcycleList->paginate(10);
@@ -82,7 +88,7 @@ class MotorcycleController extends Controller
                     'type' => "required| min:2 | max:15",
                     'production_year' => "required | integer | digits:4 | before_or_equal:$currentYear",
                     'transmission' => "required",
-                    "price" => "required",
+                    "price" => "required | integer",
                     "engine_capacity" => 'required | integer',
                     "image" => "required|image|mimes:jpeg,png,jpg,gif,svg:max:2048",
                     "color" => 'required'
@@ -101,6 +107,9 @@ class MotorcycleController extends Controller
     }
 
     public function edit(Motorcycle $motorcycle){
+        if (!Motorcycle::where("id", $motorcycle->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin){
                 return view("motorcycles.edit", compact("motorcycle"));
@@ -111,6 +120,9 @@ class MotorcycleController extends Controller
     }
 
     public function update(Motorcycle $motorcycle){
+        if (!Motorcycle::where("id", $motorcycle->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin){
                 $currentYear = date('Y');
@@ -120,7 +132,7 @@ class MotorcycleController extends Controller
                     'type' => "required| min:2 | max:15",
                     'production_year' => "required | integer | digits:4 | before_or_equal:$currentYear",
                     'transmission' => "required",
-                    "price" => "required",
+                    "price" => "required|integer",
                     "engine_capacity" => 'required',
                     "image" => "image|mimes:jpeg,png,jpg,gif,svg:max:2048",
                     "color" => 'required'
@@ -139,6 +151,9 @@ class MotorcycleController extends Controller
         return redirect(route("auth.login"));
     }
     public function destroy(Motorcycle $motorcycle){
+        if (!Motorcycle::where("id", $motorcycle->id)->exists()) {
+            return back();
+        }
         if(auth()->user()){
             if(auth()->user()->isAdmin && Motorcycle::where("id", $motorcycle->id)){
                 Storage::disk("public")->delete($motorcycle->image ?? "");
@@ -148,5 +163,20 @@ class MotorcycleController extends Controller
             return abort(403);
         }
         return redirect(route("auth.login"));
+    }
+    public function show(Motorcycle $motorcycle){
+        if (session("startDate") === null || session("endDate") === null) {
+            return back();
+        }
+
+        if (!auth()->check()) {
+            return redirect(route("auth.login"));
+        }
+        if (!Motorcycle::where("id", $motorcycle->id)->exists()) {
+            return back();
+        }
+
+        // Display the motorcycle's details
+        return view("motorcycles.show", ["motorcycle" => $motorcycle]);
     }
 }

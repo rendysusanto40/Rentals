@@ -83,7 +83,6 @@
                             <option value="Manual" {{ $motorcycle->transmission == 'Manual' ? 'selected' : '' }}>Manual</option>
                             <option value="Automatic" {{ $motorcycle->transmission == 'Automatic' ? 'selected' : '' }}>Automatic</option>
                             <option value="Semi-Automatic" {{ $motorcycle->transmission == 'Semi-Automatic' ? 'selected' : '' }}>Semi-Automatic</option>
-
                         </select>
                         @error("transmission")
                             <p class="text-red-500 text-xs">{{$message}}</p>
